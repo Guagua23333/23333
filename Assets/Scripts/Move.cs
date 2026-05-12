@@ -1,12 +1,13 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Move : MonoBehaviour
 {
     public int health = 100;
     public float movespeed = 5f;
     public float jumpForce = 10f;
-
+    public Image HealthImage;
     private Rigidbody2D rb;
     private Animator anim;
     
@@ -39,6 +40,13 @@ public class Move : MonoBehaviour
 
         // 動畫控制
         HandleAnimation(moveInput);
+
+        if ((transform.position.y < -9) )
+        {
+            Die();
+        }
+
+        HealthImage.fillAmount = health / 100f;
     }
 
 
@@ -121,4 +129,5 @@ public class Move : MonoBehaviour
     {
         UnityEngine. SceneManagement. SceneManager. LoadScene("SampleScene");
     }
+    
 }
