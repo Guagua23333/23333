@@ -101,12 +101,6 @@ public class Move : MonoBehaviour
             
         }
         
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            canJump = true;
-            jumpCount = 0;
-            
-        }
     }
     
     private void OnCollisionExit2D(Collision2D collision)
