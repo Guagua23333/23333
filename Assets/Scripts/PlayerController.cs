@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     public float minjumpForce = 10f;
     public float maxChargeTime = 1f; //最常蓄力時間
     
+    public bool infiniteJump = false;//無限跳躍
+    
     public float reboundForce = 50f;
 
     private Rigidbody2D rb2D;
@@ -14,6 +16,7 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer _renderer; //圖片渲染顏色
 
     private float buttonDowntime;
+    
     bool canJump = true;
     
     //取得滑鼠座標
@@ -29,11 +32,21 @@ public class PlayerController : MonoBehaviour
         _renderer = GetComponent<SpriteRenderer>();
     }
 
-    void Start()
+    private void OnEnable()
     {
-        
+        gameUIMgr.OnInfiniteJumpChanged += SetInfiniteJump;
     }
 
+    private void OnDisable()
+    {
+        gameUIMgr.OnInfiniteJumpChanged -= SetInfiniteJump;
+    }
+    
+    void SetInfiniteJump(bool value)
+    {
+        infiniteJump = value;
+    }
+    
     void Update()
     {
         mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -117,11 +130,9 @@ public class PlayerController : MonoBehaviour
                     break;
                 case level.Normal:
                     finalForce = reboundForce / 5f;
-                    print("正常");
                     break;
                 case level.Strong:
                     finalForce = reboundForce;
-                    print("強反彈");
                     break;
             }
            
@@ -134,6 +145,7 @@ public class PlayerController : MonoBehaviour
     
     private void OnCollisionExit2D(Collision2D collision)
     {
+        if(infiniteJump)return;
         if (collision.gameObject.CompareTag("Ground"))
         {
             canJump = false;//可跳躍 "關閉"
