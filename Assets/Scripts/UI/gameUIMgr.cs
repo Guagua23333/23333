@@ -47,6 +47,12 @@ public class gameUIMgr : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    public void RestartMainMenu()
+    {
+        Time.timeScale = 1f; // 避免遊戲曾經暫停
+        SceneManager.LoadScene("MainMenu");
+    }
+
     public void Openmusic()
     {
         musicPanel.SetActive(true);

@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public AudioSource audioSource;
+    public AudioClip hitSfx;
+    
     public float maxjumpForce = 100f;
     public float minjumpForce = 10f;
     public float maxChargeTime = 1f; //最常蓄力時間
@@ -10,12 +13,14 @@ public class PlayerController : MonoBehaviour
     public bool infiniteJump = false;//無限跳躍
     
     public float reboundForce = 50f;
+    
 
     private Rigidbody2D rb2D;
     private Animator anim;
     private SpriteRenderer _renderer; //圖片渲染顏色
 
     private float buttonDowntime;
+    private float lastHitTime;
     
     bool canJump = true;
     
@@ -30,6 +35,7 @@ public class PlayerController : MonoBehaviour
         rb2D = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         _renderer = GetComponent<SpriteRenderer>();
+        
     }
 
     private void OnEnable()
@@ -113,6 +119,15 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (audioSource != null && hitSfx != null)
+        {
+            if (Time.time - lastHitTime > 0.1f)
+            {
+                audioSource.PlayOneShot(hitSfx);
+                lastHitTime = Time.time;
+            }
+        }
+        
         if (collision.gameObject.CompareTag("Ground"))
         {
             canJump = true;//可跳躍 "開啟"
